@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:async';
 
-class FirstScreen extends StatefulWidget {
+class Home_screen extends StatefulWidget {
   @override
-  _FirstScreenState createState() => _FirstScreenState();
+  _Home_screenState createState() => _Home_screenState();
 }
 
-class _FirstScreenState extends State<FirstScreen> {
+class _Home_screenState extends State<Home_screen> {
   Future<bool> _onWillPop() {
     return showDialog(
           context: context,
