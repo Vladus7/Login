@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class ZeroScreen extends StatefulWidget {
   @override
   _ZeroScreenState createState() => _ZeroScreenState();
@@ -21,68 +20,68 @@ class _ZeroScreenState extends State<ZeroScreen> {
   Future _login() async {
     setState(() {
       _loading = false;
-    });Navigator.of(context).pushReplacementNamed('/screen2');
+    });
+    Navigator.of(context).pushReplacementNamed('/Home_screen');
   }
 
   @override
   Widget build(BuildContext context) {
-    var body =  ListView(children: <Widget>[ Column(children: <Widget>[
-      Container(
-        padding: const EdgeInsets.all(40.0),
-        child: Form(
-            autovalidate: true,
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[Container(child:
-                  Image.asset('images/men.png'),),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25)),
-                      filled: true,
-                      fillColor: Colors.white,
-                      labelText: 'Email',
+    var body = ListView(children: <Widget>[
+      Column(children: <Widget>[
+        Container(
+          padding: const EdgeInsets.all(40.0),
+          child: Form(
+              autovalidate: true,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      child: Image.asset('images/men.png'),
                     ),
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return 'Please enter email';
-                      }
-                    },
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                  ),
-                  PasswordField(),
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                  ),
-                  RaisedButton(
-                    color: Colors.blue[200],
-                    onPressed: _onLoading,
-                    //tooltip: 'Loading',
-                    child: Text('Login into account'),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                  ),
-                  FlatButton(
-                      child: const Text('Register'),
-                      splashColor: Colors.white,
-                      onPressed: () {
-                        Navigator.of(context).pushNamed('/screen4');
-                      }),
-                  FlatButton(
-                      child: const Text('Forgot password?'),
-                      splashColor: Colors.white,
-                      onPressed: () {
-                        Navigator.of(context).pushNamed('/screen5');
-                      }),
-                ])),
-      )
-    ])]);
+                    TextFormField(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(25)),
+                        filled: true,
+                        fillColor: Colors.white,
+                        labelText: 'Email',
+                      ),
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please enter email';
+                        }
+                      },
+                      keyboardType: TextInputType.emailAddress,
+                    ),
+                    SizedBox(height: 5.0),
+                    PasswordField(),
+                    SizedBox(height: 5.0),
+                    RaisedButton(
+                      color: Colors.blue[200],
+                      onPressed: _onLoading,
+                      //tooltip: 'Loading',
+                      child: Text('Login into account'),
+                    ),
+                    SizedBox(height: 5.0),
+                    FlatButton(
+                        child: const Text('Register'),
+                        splashColor: Colors.white,
+                        onPressed: () {
+                          Navigator.of(context).pushNamed('/RegisterScreen');
+                        }),
+                    FlatButton(
+                        child: const Text('Forgot password?'),
+                        splashColor: Colors.white,
+                        onPressed: () {
+                          Navigator.of(context)
+                              .pushNamed('/ForgotPasswordScreen');
+                        }),
+                  ])),
+        )
+      ])
+    ]);
 
     var bodyProgress = Container(
       child: Stack(
@@ -132,8 +131,7 @@ class _ZeroScreenState extends State<ZeroScreen> {
     );
 
     return Scaffold(
-        body:
-      Container(
+      body: Container(
           decoration: BoxDecoration(color: Colors.white),
           child: _loading ? bodyProgress : body),
     );

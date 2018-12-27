@@ -9,18 +9,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home:  ZeroScreen(),
+      home: ZeroScreen(),
       routes: <String, WidgetBuilder>{
-        '/screen1': (BuildContext context) => ZeroScreen(),
-        '/screen2': (BuildContext context) => FirstScreen(),
-        '/screen3': (BuildContext context) => SecondScreen(),
-        '/screen4': (BuildContext context) => RegisterScteen(),
-        '/screen5': (BuildContext context) => ForgotPasswordScteen()
+        '/Login_screen': (BuildContext context) => ZeroScreen(),
+        '/Home_screen': (BuildContext context) => FirstScreen(),
+        '/Share_screen': (BuildContext context) => SecondScreen(),
+        '/RegisterScreen': (BuildContext context) => RegisterScreen(),
+        '/ForgotPasswordScreen': (BuildContext context) =>
+            ForgotPasswordScreen()
       },
     );
   }
 }
-
 
 class SecondScreen extends StatelessWidget {
   @override
@@ -33,7 +33,7 @@ class SecondScreen extends StatelessWidget {
   }
 }
 
-class RegisterScteen extends StatelessWidget {
+class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +41,7 @@ class RegisterScteen extends StatelessWidget {
   }
 }
 
-class ForgotPasswordScteen extends StatelessWidget {
+class ForgotPasswordScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
