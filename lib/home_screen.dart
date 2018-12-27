@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:async';
 
-class Home_screen extends StatefulWidget {
+class HomeScreen extends StatefulWidget {
   @override
-  _Home_screenState createState() => _Home_screenState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _Home_screenState extends State<Home_screen> {
+class _HomeScreenState extends State<HomeScreen> {
   Future<bool> _onWillPop() {
     return showDialog(
           context: context,
@@ -42,13 +42,13 @@ class _Home_screenState extends State<Home_screen> {
                     icon: Icon(Icons.exit_to_app),
                     onPressed: () {
                       Navigator.of(context)
-                          .pushReplacementNamed('/Login_screen');
+                          .pushReplacementNamed('/login_screen');
                     },
                   ),
                   IconButton(
                     icon: Icon(Icons.share),
                     onPressed: () {
-                      Navigator.of(context).pushNamed('/Share_screen');
+                      Navigator.of(context).pushNamed('/share_screen');
                     },
                   ),
                 ]),

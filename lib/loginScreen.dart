@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class Login_screen extends StatefulWidget {
+class LoginScreen extends StatefulWidget {
   @override
-  _Login_screenState createState() => _Login_screenState();
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _Login_screenState extends State<Login_screen> {
+class _LoginScreenState extends State<LoginScreen> {
   bool _loading = false;
   String _email = '';
   String _password = '';
@@ -21,7 +21,7 @@ class _Login_screenState extends State<Login_screen> {
     setState(() {
       _loading = false;
     });
-    Navigator.of(context).pushReplacementNamed('/Home_screen');
+    Navigator.of(context).pushReplacementNamed('/home_screen');
   }
 
   @override
@@ -69,14 +69,14 @@ class _Login_screenState extends State<Login_screen> {
                         child: const Text('Register'),
                         splashColor: Colors.white,
                         onPressed: () {
-                          Navigator.of(context).pushNamed('/RegisterScreen');
+                          Navigator.of(context).pushNamed('/register_screen');
                         }),
                     FlatButton(
                         child: const Text('Forgot password?'),
                         splashColor: Colors.white,
                         onPressed: () {
                           Navigator.of(context)
-                              .pushNamed('/ForgotPasswordScreen');
+                              .pushNamed('/forgot_password_screen');
                         }),
                   ])),
         )
