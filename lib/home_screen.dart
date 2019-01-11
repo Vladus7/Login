@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
+import 'package:login_program/loading_screen.dart';
+import 'dart:convert';
 import 'dart:async';
+import 'package:http/http.dart' as http;
 
 class HomeScreen extends StatefulWidget {
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  HomeScreenState createState() => HomeScreenState();
+
+final List<String> items;
+HomeScreen({Key key, @required this.items}) : super(key: key);
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class HomeScreenState extends State<HomeScreen> {
+
+  List data;
+
   Future<bool> _onWillPop() {
     return showDialog(
           context: context,
@@ -27,6 +35,25 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
         ) ??
         false;
+  }
+
+  Future<String> getData() async {
+    var response = await http.get(
+        Uri.encodeFull('https://api.myjson.com/bins/8jxuc'), headers: {'Accept': 'application/json'}
+    );
+
+    this.setState(() {
+      data = json.decode(response.body);
+    });
+    print(data[1]['title']);
+
+    return "Success!";
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    this.getData();
   }
 
   @override
@@ -52,29 +79,24 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   ),
                 ]),
-            body: many_item(
-              items: List<String>.generate(100, (i) => "Item $i"),
-            )));
-  }
-}
-
-class many_item extends StatelessWidget {
-  final List<String> items;
-
-  many_item({Key key, @required this.items}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: items.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          leading: const Icon(Icons.photo_album),
-          title: const Text('aaasdfg'),
-          subtitle: const Text('qwerty'),
-          trailing: const Icon(Icons.phone),
-        );
-      },
+            body: Center(child: FutureBuilder(
+              future: getData(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                    itemCount: data == null ? 0 : data.length,
+                    itemBuilder: (BuildContext context, int i) {
+                      return ListTile(
+                        title: new Text(data[i]['title']),
+                        subtitle: Text(data[i]['subtitle']),
+                      );
+                    },
+                  );
+                } 
+                return LoadingIndicator();
+              },
+        ))
+    )
     );
   }
 }
