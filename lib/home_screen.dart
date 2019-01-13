@@ -73,6 +73,12 @@ class HomeScreenState extends State<HomeScreen> {
                     },
                   ),
                   IconButton(
+                    icon: Icon(Icons.account_circle ),
+                    onPressed: () {
+                      Navigator.of(context).pushNamed('/account_screen');
+                    },
+                  ),
+                  IconButton(
                     icon: Icon(Icons.share),
                     onPressed: () {
                       Navigator.of(context).pushNamed('/share_screen');

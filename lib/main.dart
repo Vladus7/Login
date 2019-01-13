@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:login_program/loginScreen.dart';
 import 'package:login_program/home_screen.dart';
+import 'package:login_program/account_screen.dart';
+
 
 void main() => runApp(MyApp());
 
@@ -14,6 +16,7 @@ class MyApp extends StatelessWidget {
         '/login_screen': (BuildContext context) => LoginScreen(),
         '/home_screen': (BuildContext context) => HomeScreen(),
         '/share_screen': (BuildContext context) => ShareScreen(),
+        '/account_screen':(BuildContext context) => AccountScreen(),
         '/register_screen': (BuildContext context) => RegisterScreen(),
         '/forgot_password_screen': (BuildContext context) =>
             ForgotPasswordScreen()
