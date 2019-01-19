@@ -60,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     PasswordField(),
                     SizedBox(height: 5.0),
                     RaisedButton(
-                      color: Colors.blue[200],
+                      color: Colors.red[400],
                       onPressed: _onLoading,
                       //tooltip: 'Loading',
                       child: Text('Login into account'),

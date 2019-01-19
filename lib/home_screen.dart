@@ -16,26 +16,7 @@ class HomeScreenState extends State<HomeScreen> {
 
   List data;
 
-  Future<bool> _onWillPop() {
-    return showDialog(
-          context: context,
-          builder: (context) => new AlertDialog(
-                title: Text('Are you sure?'),
-                content: Text('Do you want to exit an App'),
-                actions: <Widget>[
-                  FlatButton(
-                    onPressed: () => Navigator.of(context).pop(false),
-                    child: Text('No'),
-                  ),
-                  FlatButton(
-                    onPressed: () => Navigator.of(context).pop(true),
-                    child: Text('Yes'),
-                  ),
-                ],
-              ),
-        ) ??
-        false;
-  }
+
 
   Future<String> getData() async {
     var response = await http.get(
@@ -58,9 +39,7 @@ class HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-        onWillPop: _onWillPop,
-        child: Scaffold(
+    return Scaffold(
             appBar: AppBar(
                 title: Text('Chooise'),
                 automaticallyImplyLeading: false,
@@ -103,6 +82,6 @@ class HomeScreenState extends State<HomeScreen> {
               },
         ))
     )
-    );
+    ;
   }
 }

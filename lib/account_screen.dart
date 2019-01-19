@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:login_program/countries.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+
+String photo = 'images/men.png';
 
 class AccountScreen extends StatefulWidget {
   @override
@@ -7,6 +11,43 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
+  Future<Null>  getPhoto() async {
+    final File _photo = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      if (_photo != null) photo = _photo.path;
+    });
+  }
+  Future<Null> makePhoto() async {
+    final File _photo = await ImagePicker.pickImage(source: ImageSource.camera);
+    setState(() {
+      if (_photo != null) photo = _photo.path;
+    });
+  }
+
+  void _settingModalBottomSheet(context){
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc){
+          return Container(
+            child: new Wrap(
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.photo_camera),
+                  // title: new Text('Make a photo'),
+                  onPressed: () {makePhoto();},
+                ),
+                IconButton(
+                  icon: new Icon(Icons.photo),
+                  //title: new Text('Upload a photo'),
+                  onPressed: () {getPhoto();},
+                ),
+              ],
+            ),
+          );
+        }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,15 +63,14 @@ class _AccountScreenState extends State<AccountScreen> {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Container(
-                      width: 190.0,
-                      height: 190.0,
-                      decoration: new BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: new DecorationImage(
-                            fit: BoxFit.fill,
-                          image: ExactAssetImage('images/men.png'),
-                        ))),
+                        IconButton(
+                          iconSize: 200,
+                          icon: CircleAvatar(
+                            backgroundImage: ExactAssetImage(photo),
+                            radius: 125,
+                          ),
+                          onPressed: () {_settingModalBottomSheet(context);
+                          },),
                         TextFormField(
                           decoration: InputDecoration(
                             filled: true,
