@@ -1,33 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:login_program/loading_screen.dart';
 
+String email = '';
+String password = '';
+
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  bool _loading = false;
-  String _email = '';
-  String _password = '';
-
-  void _onLoading() {
-    setState(() {
-      _loading = true;
-      Future.delayed(Duration(seconds: 4), _login);
-    });
-  }
-
-  Future _login() async {
-    setState(() {
-      _loading = false;
-    });
-    Navigator.of(context).pushReplacementNamed('/home_screen');
-  }
-
   @override
   Widget build(BuildContext context) {
-    var body = ListView(children: <Widget>[
+    return Scaffold(
+        body: ListView(children: <Widget>[
       Column(children: <Widget>[
         Container(
           padding: const EdgeInsets.all(40.0),
@@ -39,12 +25,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                      child: Image.asset('images/men.png'),
-                    ),
+                        child: CircleAvatar(
+                            backgroundImage: ExactAssetImage(
+                              'images/person.jpg',
+                            ),
+                            radius: 100)),
                     TextFormField(
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25)),
+                            borderRadius: BorderRadius.circular(32)),
                         filled: true,
                         fillColor: Colors.white,
                         labelText: 'Email',
@@ -59,21 +48,47 @@ class _LoginScreenState extends State<LoginScreen> {
                     SizedBox(height: 5.0),
                     PasswordField(),
                     SizedBox(height: 5.0),
-                    RaisedButton(
-                      color: Colors.red[400],
-                      onPressed: _onLoading,
-                      //tooltip: 'Loading',
-                      child: Text('Login into account'),
+                    ButtonTheme(
+                      minWidth: 330.0,
+                      height: 50.0,
+                      child: RaisedButton(
+                        shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0),side: BorderSide(width: 2, color: Colors.black)),
+                        color: Colors.white,
+                        onPressed: () {
+                          Navigator.of(context)
+                              .pushReplacementNamed('/home_screen');
+                        },
+                        child: Text('Sign in with Email',style: TextStyle(
+    fontSize: 20,
+    ),),
+                      ),
+                    ),
+                    SizedBox(height: 5.0),
+                    ButtonTheme(
+                      minWidth: 330.0,
+                      height: 50.0,
+                      child: RaisedButton(
+                        shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0),side: BorderSide(width: 2, color: Colors.red)),
+                        color: Colors.white,
+                        onPressed: () {
+                          Navigator.of(context)
+                              .pushReplacementNamed('/home_screen');
+                        },
+                        child: Text('Sign in with Google',style: TextStyle(color: Colors.red,
+                            fontSize: 20,
+                    ),),
+                      ),
                     ),
                     SizedBox(height: 5.0),
                     FlatButton(
-                        child: const Text('Register'),
+                        child: const Text('Register',),
                         splashColor: Colors.white,
                         onPressed: () {
                           Navigator.of(context).pushNamed('/register_screen');
                         }),
                     FlatButton(
-                        child: const Text('Forgot password?'),
+                        child: const Text('Forgot password?',
+                        ),
                         splashColor: Colors.white,
                         onPressed: () {
                           Navigator.of(context)
@@ -82,15 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ])),
         )
       ])
-    ]);
-
-    var bodyProgress = LoadingIndicator();
-
-    return Scaffold(
-      body: Container(
-          decoration: BoxDecoration(color: Colors.white),
-          child: _loading ? bodyProgress : body),
-    );
+    ]));
   }
 }
 
@@ -101,7 +108,6 @@ class PasswordField extends StatefulWidget {
 
 class _PasswordFieldState extends State<PasswordField> {
   bool _obscureText = true;
-  String _password;
 
   void _toggle() {
     setState(() {
@@ -118,13 +124,13 @@ class _PasswordFieldState extends State<PasswordField> {
           child: TextFormField(
             decoration: InputDecoration(
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(25),
+                borderRadius: BorderRadius.circular(32),
               ),
               suffixIcon: IconButton(
                 onPressed: _toggle,
                 icon: (_obscureText
                     ? Icon(Icons.visibility, color: Colors.grey)
-                    : Icon(Icons.visibility, color: Colors.blue)),
+                    : Icon(Icons.visibility, color: Colors.red)),
               ),
               labelText: 'Password',
             ),

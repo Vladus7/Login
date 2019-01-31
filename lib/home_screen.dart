@@ -67,6 +67,46 @@ class HomeScreenState extends State<HomeScreen> {
               },
             ),
           ]),
+      drawer: Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          UserAccountsDrawerHeader(
+              decoration: BoxDecoration(
+                image: DecorationImage(image: AssetImage('images/Header-3.jpg'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+//              child: Text('About us',
+//                style: TextStyle(
+//                    fontSize: 20,
+//                    color: Colors.red,
+//                    fontStyle: FontStyle.italic),),
+              currentAccountPicture: CircleAvatar(backgroundImage: ExactAssetImage('images/person.jpg'),
+                radius: 100,),
+              accountName: new Text(
+                "Yuvraj Pandey",
+                style: new TextStyle(
+                    fontSize: 18.0, fontWeight: FontWeight.w500),
+              ),
+              accountEmail: new Text(
+                "yuvrajn.pandey@gmail.com",
+                style: new TextStyle(
+                    fontSize: 18.0, fontWeight: FontWeight.w500),
+              )),
+          ListTile(
+            leading: Image.asset('images/team_icon.png',width: 45.0,height: 45.0,),
+            title: Text('About us',
+                style: TextStyle(
+                    fontSize: 20,
+                    fontStyle: FontStyle.italic)),
+            onTap: () {
+              Navigator.of(context).pushNamed('/us_screen');
+            },
+          ),
+        ],
+      ),
+    ),
       body: _ListPages[HomeScreenIndex],
       bottomNavigationBar: bottomNavBar,
     )

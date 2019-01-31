@@ -3,7 +3,7 @@ import 'package:login_program/countries.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-String photo = 'images/men.png';
+String photo = 'images/person.jpg';
 
 class AccountScreen extends StatefulWidget {
   @override

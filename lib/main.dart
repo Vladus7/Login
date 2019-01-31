@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:login_program/loginScreen.dart';
 import 'package:login_program/home_screen.dart';
 import 'package:login_program/account_screen.dart';
+import 'package:login_program/about_us_screens.dart';
 
 
 void main() => runApp(MyApp());
@@ -21,8 +22,9 @@ class MyApp extends StatelessWidget {
         '/share_screen': (BuildContext context) => ShareScreen(),
         '/account_screen':(BuildContext context) => AccountScreen(),
         '/register_screen': (BuildContext context) => RegisterScreen(),
-        '/forgot_password_screen': (BuildContext context) =>
-            ForgotPasswordScreen()
+        '/forgot_password_screen': (BuildContext context) => ForgotPasswordScreen(),
+        '/us_screen': (BuildContext context) => UsScreen(),
+        '/map_screen': (BuildContext context) => MapScreen(),
       },
     );
   }
