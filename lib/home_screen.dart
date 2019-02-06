@@ -5,18 +5,48 @@ import 'package:login_program/loading_screen.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
   HomeScreenState createState() => HomeScreenState();
-
   final List<String> items;
 
-  HomeScreen({Key key, @required this.items}) : super(key: key);
+  HomeScreen({
+    Key key, @required this.items
+  }) : super(key: key);
 }
 
 class HomeScreenState extends State<HomeScreen> {
   int HomeScreenIndex = 0;
+  SharedPreferences sharedPreferences;
+  String sharedPreferenceName;
+  String checkValue;
+
+
+  @override
+  void initState() {
+    super.initState();
+    _onChanged();
+  }
+
+  _onChanged() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    setState(() {
+      checkValue = sharedPreferences.getString("username");
+      if (checkValue != null) {
+      sharedPreferenceName = sharedPreferences.getString("username");
+    }
+    else {sharedPreferenceName = "You logged in with google";}
+    });
+  }
+
+  getCredential() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    setState(() {
+      sharedPreferences.remove("username");
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,45 +98,55 @@ class HomeScreenState extends State<HomeScreen> {
             ),
           ]),
       drawer: Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          UserAccountsDrawerHeader(
-              decoration: BoxDecoration(
-                image: DecorationImage(image: AssetImage('images/Header-3.jpg'),
-                  fit: BoxFit.cover,
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            UserAccountsDrawerHeader(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('images/Header-3.jpg'),
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              ),
-//              child: Text('About us',
-//                style: TextStyle(
-//                    fontSize: 20,
-//                    color: Colors.red,
-//                    fontStyle: FontStyle.italic),),
-              currentAccountPicture: CircleAvatar(backgroundImage: ExactAssetImage('images/person.jpg'),
-                radius: 100,),
-              accountName: new Text(
-                "Yuvraj Pandey",
-                style: new TextStyle(
-                    fontSize: 18.0, fontWeight: FontWeight.w500),
-              ),
-              accountEmail: new Text(
-                "yuvrajn.pandey@gmail.com",
-                style: new TextStyle(
-                    fontSize: 18.0, fontWeight: FontWeight.w500),
-              )),
-          ListTile(
-            leading: Image.asset('images/team_icon.png',width: 45.0,height: 45.0,),
-            title: Text('About us',
-                style: TextStyle(
-                    fontSize: 20,
-                    fontStyle: FontStyle.italic)),
-            onTap: () {
-              Navigator.of(context).pushNamed('/us_screen');
-            },
-          ),
-        ],
+                currentAccountPicture: CircleAvatar(
+                  backgroundImage: ExactAssetImage('images/person.jpg'),
+                  radius: 100,),
+                accountName: new Text(
+                  sharedPreferenceName,
+                  style: new TextStyle(
+                      fontSize: 18.0, fontWeight: FontWeight.w500),
+                ),
+//                accountEmail: new Text(
+//                  sharedPreferencePassword,
+//                  style: new TextStyle(
+//                      fontSize: 18.0, fontWeight: FontWeight.w500),
+//                )
+),
+            ListTile(
+              leading: Image.asset(
+                'images/team_icon.png', width: 45.0, height: 45.0,),
+              title: Text('About us',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontStyle: FontStyle.italic)),
+              onTap: () {
+                Navigator.of(context).pushNamed('/us_screen');
+              },),
+            ListTile(
+              leading: Icon(Icons.exit_to_app, color: Colors.red, size: 45.0,),
+              //Image.asset('images/team_icon.png', width: 45.0, height: 45.0,),
+              title: Text('Log out',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontStyle: FontStyle.italic)),
+              onTap: () {
+                getCredential();
+                Navigator.of(context).pushNamed('/login_screen');
+              },
+            ),
+          ],
+        ),
       ),
-    ),
       body: _ListPages[HomeScreenIndex],
       bottomNavigationBar: bottomNavBar,
     )
@@ -127,10 +167,12 @@ class _SportLigPageState extends State<SportLigPage> {
     var response = await http
         .get(Uri.encodeFull(
         'https://www.thesportsdb.com/api/v1/json/1/all_sports.php'),
-        headers: {"Accept": "application/json"});
+        headers: {
+          "Accept": "application/json"
+        });
 
-      var extractdata = json.decode(response.body);
-      data = extractdata["sports"];
+    var extractdata = json.decode(response.body);
+    data = extractdata["sports"];
 
     return data;
   }
@@ -142,33 +184,35 @@ class _SportLigPageState extends State<SportLigPage> {
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
         body: FutureBuilder(
-        future: makeRequest(),
-    builder: (BuildContext context, AsyncSnapshot snapshot) {
-    return snapshot.hasData ?
-    ListView.builder(
-            itemCount: snapshot.data.length,
-            itemBuilder: (BuildContext context, i) {
-              return  ListTile(
-                title:  Text(data[i]["strSport"]),
-                leading: Image.network(
-                  data[i]["strSportThumb"],
-                  width: 100,
-                ),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      new MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                          new DetailInformationScreen(data[i])));
-                },
-              );
-            }):LoadingIndicator();}));
+            future: makeRequest(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              return snapshot.hasData ?
+              ListView.builder(
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (BuildContext context, i) {
+                    return ListTile(
+                      title: Text(data[i]["strSport"]),
+                      leading: Image.network(
+                        data[i]["strSportThumb"],
+                        width: 100,
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            new MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                new DetailInformationScreen(data[i])));
+                      },
+                    );
+                  }) : LoadingIndicator();
+            }));
   }
 }
 
-class DetailInformationScreen extends StatelessWidget {
+class DetailInformationScreen extends
+StatelessWidget {
   DetailInformationScreen(this.data);
 
   final data;
@@ -184,42 +228,60 @@ class DetailInformationScreen extends StatelessWidget {
                 child: Text(data["strSport"],
                     style: TextStyle(color: Colors.red, fontSize: 32)),
               ),
-              SizedBox(height: 5.0),
+              SizedBox(height: 5.0)
+              ,
               Image.network(
-                data["strSportThumb"],
+                data["strSportThumb"
+                ],
               ),
-              SizedBox(height: 20.0),
-        Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-            child: Text(data["strSportDescription"],
-                style: TextStyle(fontSize: 18)),
-                             ),
+              SizedBox(height: 20.0)
+              ,
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal
+                    : 15, vertical: 20),
+                child:
+                Text(data["strSportDescription"],
+                    style
+                        : TextStyle(fontSize: 18)),
+              )
+              ,
             ])
           ]));
 }
 
-class LigList extends StatefulWidget {
+class LigList extends
+StatefulWidget {
   @override
-  _LigListState createState() => _LigListState();
+  _LigListState createState() => _LigListState()
+  ;
 }
 
-class _LigListState extends State<LigList> {
+class _LigListState extends
+State
+<
+    LigList
+> {
 
 
   String sport;
   String country;
   List data;
+
   Future<List<ListTile>> getJsonData() async {
     http.Response data;
     String key = "countrys";
     List<ListTile> listTiles = [];
 
-    if (country == null && sport == null) { data = await http.get("https://www.thesportsdb.com/api/v1/json/1/all_leagues.php");
-    key = "leagues";
-    } else if (country != null&& sport == null) {
-      data = await http.get("https://www.thesportsdb.com/api/v1/json/1/search_all_leagues.php?c=$country");
+    if (country == null && sport == null) {
+      data = await http.get(
+          "https://www.thesportsdb.com/api/v1/json/1/all_leagues.php");
+      key = "leagues";
+    } else if (country != null && sport == null) {
+      data = await http.get(
+          "https://www.thesportsdb.com/api/v1/json/1/search_all_leagues.php?c=$country");
     } else {
-      data = await http.get("https://www.thesportsdb.com/api/v1/json/1/search_all_leagues.php?c=$country&s=$sport");
+      data = await http.get(
+          "https://www.thesportsdb.com/api/v1/json/1/search_all_leagues.php?c=$country&s=$sport");
     }
     var jsonData = json.decode(data.body);
 
@@ -232,8 +294,9 @@ class _LigListState extends State<LigList> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => TeamsListScreen(i["idLeague"])));},
-                  );
+                    builder: (context) => TeamsListScreen(i["idLeague"])));
+          },
+        );
         listTiles.add(lt);
       }
     }
@@ -257,7 +320,7 @@ class _LigListState extends State<LigList> {
           DropdownButton(
             value: country,
             hint: Text("Choose a countre league of which you want to find"),
-            items:  _dropDownItems,
+            items: _dropDownItems,
             onChanged: (value) {
               country = value;
               print(country);
@@ -297,7 +360,7 @@ class _LigListState extends State<LigList> {
                         })
                         : Padding(
                         padding: EdgeInsets.symmetric(vertical: 20),
-                        child:  LoadingIndicator());
+                        child: LoadingIndicator());
                   }))
         ]),
       ),
@@ -306,15 +369,30 @@ class _LigListState extends State<LigList> {
 }
 
 
-Future<List<DropdownMenuItem<String>>> _getSports() async {
+Future
+<
+    List
+    <
+        DropdownMenuItem
+        <
+            String
+        >
+    >
+>
+_getSports
+    () async
+{
   var data = await http
       .get("https://www.thesportsdb.com/api/v1/json/1/all_sports.php");
-  var jsonData = json.decode(data.body);
+      var jsonData = json.decode(
+      data.body);
 
-  List<DropdownMenuItem<String>> listDrops = [];
+  List<DropdownMenuItem<String
+  >> listDrops = [];
 
 
-  for (var i in jsonData["sports"]) {
+  for (var
+  i in jsonData["sports"]) {
     listDrops.add(DropdownMenuItem(
       child: Row(children: <Widget>[
         Text(i["strSport"].toString()),
