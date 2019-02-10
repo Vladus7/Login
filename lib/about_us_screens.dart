@@ -19,13 +19,16 @@ class _UsScreenState extends State<UsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-        appBar: AppBar(
-          title: Text("About us"),
-        ),
-        body: ListView( children: <Widget>[
-          ListTile(
-          leading: Icon(Icons.play_arrow, color: Colors.red,),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("About us"),
+      ),
+      body: ListView(children: <Widget>[
+        ListTile(
+          leading: Icon(
+            Icons.play_arrow,
+            color: Colors.red,
+          ),
           title: Text('Video'),
           onTap: () {
             _launchURL('https://www.youtube.com/watch?v=tMfpJB7Q91c');
@@ -33,11 +36,15 @@ class _UsScreenState extends State<UsScreen> {
         ),
         ListTile(
           title: Text('Map'),
-          leading: Icon(Icons.map,  color: Colors.red,),
+          leading: Icon(
+            Icons.map,
+            color: Colors.red,
+          ),
           onTap: () {
             Navigator.of(context).pushNamed('/map_screen');
           },
-        ),]),
+        ),
+      ]),
     );
   }
 }
@@ -52,7 +59,7 @@ class MapScreenState extends State<MapScreen> {
   var currentLocation;
 
   _getLocation() async {
-    var location = new Location();
+    var location = Location();
     try {
       currentLocation = await location.getLocation();
     } on Exception {
@@ -71,13 +78,14 @@ class MapScreenState extends State<MapScreen> {
     mapController.addMarker(
       MarkerOptions(
         position: LatLng(37.422034, -122.084187),
-        infoWindowText: InfoWindowText('My Office','Googleplex'),
+        infoWindowText: InfoWindowText('My Office', 'Googleplex'),
         icon: BitmapDescriptor.defaultMarker,
       ),
     );
     mapController.addMarker(
       MarkerOptions(
-        position: LatLng(currentLocation["latitude"], currentLocation["longitude"]),
+        position:
+            LatLng(currentLocation["latitude"], currentLocation["longitude"]),
         infoWindowText: InfoWindowText('My location', 'Home'),
         icon: BitmapDescriptor.defaultMarker,
       ),

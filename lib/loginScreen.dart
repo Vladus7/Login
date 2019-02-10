@@ -20,16 +20,10 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController username = new TextEditingController();
-  TextEditingController password = new TextEditingController();
+  TextEditingController username = TextEditingController();
+  TextEditingController password = TextEditingController();
   SharedPreferences sharedPreferences;
   bool _obscureText = true;
-
-//  @override
-//  void initState() {
-//    super.initState();
-//    getCredential();
-//  }
 
   void _toggle() {
     setState(() {
@@ -37,30 +31,11 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
-//  getCredential() async {
-//    sharedPreferences = await SharedPreferences.getInstance();
-//    setState(() {
-//      checkValue = sharedPreferences.getBool("check");
-//      if (checkValue != null) {
-//        if (checkValue) {
-//          username.text = sharedPreferences.getString("username");
-//          password.text = sharedPreferences.getString("password");
-//
-//        } else {
-//          username.clear();
-//          password.clear();
-//          sharedPreferences.clear();
-//        }
-//      } else {
-//        checkValue = false;
-//      }
-//    });
-//  }
-
   Future<void> _handleSignIn() async {
     try {
       await _googleSignIn.signIn();
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=> HomeScreen()));
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => HomeScreen()));
     } catch (error) {
       print(error);
     }
@@ -71,8 +46,8 @@ class _LoginScreenState extends State<LoginScreen> {
     if (formState.validate()) {
       formState.save();
       try {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => HomeScreen()));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => HomeScreen()));
       } catch (e) {
         print(e.message);
       }
@@ -87,52 +62,54 @@ class _LoginScreenState extends State<LoginScreen> {
         body: ListView(children: <Widget>[
           Container(
             child: Form(
-              key: _formKey,
-              autovalidate: true,
-              child: Column(
-                children: <Widget>[
+                key: _formKey,
+                autovalidate: true,
+                child: Column(children: <Widget>[
+                  SizedBox(height: 20.0),
                   CircleAvatar(
-                          backgroundImage: ExactAssetImage(
-                            'images/person.jpg',
-                          ),
-                          radius: 100),
-          Theme(
-              data: new ThemeData(
-                primaryColor: Colors.redAccent,
-              ),
-                  child: TextFormField(
-                    controller: username,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                          borderRadius: BorderRadius.circular(32)),
-                      hintText: "username",
-                      filled: true,
-                      fillColor: Colors.white,
-                      labelText: 'Email',
+                      backgroundImage: ExactAssetImage(
+                        'images/person.jpg',
+                      ),
+                      radius: 100),
+                  Theme(
+                    data: ThemeData(
+                      primaryColor: Colors.redAccent,
                     ),
-                    validator: (input) {
-                      if (input.isEmpty) {
-                        return 'Please enter email';
-                      }
-                    },
-                    //controller: myController,
-                    keyboardType: TextInputType.emailAddress,
-                  ),),
+                    child: TextFormField(
+                      controller: username,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                            borderRadius: BorderRadius.circular(32)),
+                        hintText: "username",
+                        filled: true,
+                        fillColor: Colors.white,
+                        labelText: 'Email',
+                      ),
+                      validator: (input) {
+                        if (input.isEmpty) {
+                          return 'Please enter email';
+                        }
+                      },
+                      //controller: myController,
+                      keyboardType: TextInputType.emailAddress,
+                    ),
+                  ),
                   SizedBox(height: 5.0),
-          Theme(
-              data: new ThemeData(
-                primaryColor: Colors.redAccent,
-              ),
-              child:
-              TextFormField(
-                     controller: password,
+                  Theme(
+                    data: ThemeData(
+                      primaryColor: Colors.redAccent,
+                    ),
+                    child: TextFormField(
+                      controller: password,
                       decoration: InputDecoration(
                         hintText: "password",
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(32),
-                            borderSide: BorderSide(
-                            width: 5, color: Colors.black,),
+                          borderSide: BorderSide(
+                            width: 5,
+                            color: Colors.black,
+                          ),
                         ),
                         suffixIcon: IconButton(
                           onPressed: _toggle,
@@ -144,20 +121,23 @@ class _LoginScreenState extends State<LoginScreen> {
                         //suffixStyle: Color()
                       ),
                       obscureText: _obscureText,
-                    ),),
+                    ),
+                  ),
                   SizedBox(height: 5.0),
                   ButtonTheme(
                     minWidth: double.infinity,
                     height: 55.0,
                     child: RaisedButton(
                       shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(30.0),
+                          borderRadius: BorderRadius.circular(30.0),
                           side: BorderSide(width: 1, color: Colors.black)),
                       color: Colors.white,
                       onPressed: () async {
                         signIn();
-    sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString("username", username.text);},
+                        sharedPreferences =
+                            await SharedPreferences.getInstance();
+                        sharedPreferences.setString("username", username.text);
+                      },
                       child: Text(
                         'Sign in with Email',
                         style: TextStyle(
@@ -171,18 +151,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     minWidth: double.infinity,
                     height: 55.0,
                     child: RaisedButton(
-                      shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(30.0),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
                           side: BorderSide(width: 1, color: Colors.red)),
                       color: Colors.white,
-    onPressed:
-    _handleSignIn,
-//        (){ _signInGoogle().then((FirebaseUser user){
-//    print(user);
-//    }).catchError((onError){
-//    print(onError);
-//    });}
-                    //    Navigator.of(context).pushReplacementNamed('/home_screen');
+                      onPressed: _handleSignIn,
                       child: Text(
                         'Sign in with Google',
                         style: TextStyle(

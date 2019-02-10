@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:login_program/loginScreen.dart';
 import 'package:login_program/home_screen.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ShareScreen extends StatelessWidget {
   @override
@@ -15,20 +15,23 @@ class ShareScreen extends StatelessWidget {
   }
 }
 
-
-
 class RegisterScreen extends StatefulWidget {
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  TextEditingController username = TextEditingController();
+  TextEditingController password = TextEditingController();
+  SharedPreferences sharedPreferences;
   bool _obscureText = true;
+
   void _toggle() {
     setState(() {
       _obscureText = !_obscureText;
     });
   }
+
   String _email, _password;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -45,56 +48,81 @@ class _RegisterScreenState extends State<RegisterScreen> {
               autovalidate: true,
               child: Column(
                 children: <Widget>[
+                  SizedBox(height: 20.0),
                   CircleAvatar(
                       backgroundImage: ExactAssetImage(
                         'images/person.jpg',
                       ),
                       radius: 100),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(32)),
-                      filled: true,
-                      fillColor: Colors.white,
-                      labelText: 'Email',
+                  Theme(
+                    data: ThemeData(
+                      primaryColor: Colors.redAccent,
                     ),
-                    onSaved: (input) => _email = input,
-                    validator: (input) {
-                      if (input.isEmpty) {
-                        return 'Please enter email';
-                      }
-                    },
-                    keyboardType: TextInputType.emailAddress,
+                    child: TextFormField(
+                      controller: username,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                            borderRadius: BorderRadius.circular(32)),
+                        hintText: "username",
+                        filled: true,
+                        fillColor: Colors.white,
+                        labelText: 'Email',
+                      ),
+                      validator: (input) {
+                        if (input.isEmpty) {
+                          return 'Please enter email';
+                        }
+                      },
+                      keyboardType: TextInputType.emailAddress,
+                      onSaved: (input) => _email = input,
+                    ),
                   ),
                   SizedBox(height: 5.0),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(32),
-                        borderSide: BorderSide(
-                          width: 5, color: Colors.black,),
-                      ),
-                      suffixIcon: IconButton(
-                        onPressed: _toggle,
-                        icon: (_obscureText
-                            ? Icon(Icons.visibility, color: Colors.grey)
-                            : Icon(Icons.visibility, color: Colors.red)),
-                      ),
-                      labelText: 'Password',
+                  Theme(
+                    data: ThemeData(
+                      primaryColor: Colors.redAccent,
                     ),
-                    obscureText: _obscureText,
-                    onSaved: (input) => _password = input,
+                    child: TextFormField(
+                      controller: password,
+                      decoration: InputDecoration(
+                        hintText: "password",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(32),
+                          borderSide: BorderSide(
+                            width: 5,
+                            color: Colors.black,
+                          ),
+                        ),
+                        suffixIcon: IconButton(
+                          onPressed: _toggle,
+                          icon: (_obscureText
+                              ? Icon(Icons.visibility, color: Colors.grey)
+                              : Icon(Icons.visibility, color: Colors.red)),
+                        ),
+                        labelText: 'Password',
+                      ),
+                      onSaved: (input) => _password = input,
+                      obscureText: _obscureText,
+                    ),
                   ),
+                  SizedBox(height: 5.0),
                   SizedBox(height: 5.0),
                   ButtonTheme(
                     minWidth: double.infinity,
                     height: 55.0,
                     child: RaisedButton(
-                      shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(30.0),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
                           side: BorderSide(width: 1, color: Colors.black)),
                       color: Colors.white,
-                      onPressed: signUp,
+                      onPressed: () //{
+                          async {
+                        sharedPreferences =
+                            await SharedPreferences.getInstance();
+                        sharedPreferences.setString("username", username.text);
+                        signUp();
+                      },
                       child: Text(
                         'Sign in with Email',
                         style: TextStyle(
@@ -113,18 +141,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void signUp() async {
-    if(_formKey.currentState.validate()){
+    if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      try{
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(email: _email, password: _password);
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
-      }catch(e){
+      try {
+        await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(email: _email, password: _password);
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => HomeScreen()));
+      } catch (e) {
         print(e.message);
       }
     }
   }
 }
-
 
 class ForgotPasswordScreen extends StatelessWidget {
   @override
