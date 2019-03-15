@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:login_program/team_container.dart';
 import 'package:login_program/countries.dart';
 import 'package:login_program/loading_screen.dart';
+import 'package:login_program/cards_screen.dart';
+import 'package:login_program/tikets_screen.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
@@ -26,10 +28,11 @@ class HomeScreenState extends State<HomeScreen> {
     super.initState();
     _onChanged();
   }
-
+bool sharedPreferenceIsAdmin;
   _onChanged() async {
     sharedPreferences = await SharedPreferences.getInstance();
     setState(() {
+      sharedPreferenceIsAdmin = sharedPreferences.getBool("isAdmin");
       checkValue = sharedPreferences.getString("username");
       if (checkValue != null) {
         sharedPreferenceName = sharedPreferences.getString("username");
@@ -43,20 +46,26 @@ class HomeScreenState extends State<HomeScreen> {
     sharedPreferences = await SharedPreferences.getInstance();
     setState(() {
       sharedPreferences.remove("username");
+      sharedPreferences.remove("isAdmin");
     });
   }
 
-  @override
   Widget build(BuildContext context) {
     final _ListPages = <Widget>[
       SportLigPage(),
       LigList(),
+      TicketsScreen(),
+      CardScreen(),
     ];
     final HomeScreenBottmonNavBarItems = <BottomNavigationBarItem>[
       BottomNavigationBarItem(
           icon: Icon(Icons.list), title: Text('Sport list')),
       BottomNavigationBarItem(
           icon: Icon(Icons.filter_frames), title: Text('League list')),
+      BottomNavigationBarItem(
+          icon: Icon(Icons.library_books), title: Text('Tickets')),
+      BottomNavigationBarItem(
+          icon: Icon(Icons.layers), title: Text('Carts')),
     ];
     assert(_ListPages.length == HomeScreenBottmonNavBarItems.length);
     final bottomNavBar = BottomNavigationBar(
@@ -71,30 +80,6 @@ class HomeScreenState extends State<HomeScreen> {
     );
 
     return Scaffold(
-      appBar: AppBar(
-          title: Text('Chooise'),
-          automaticallyImplyLeading: false,
-          actions: <Widget>[
-//            IconButton(
-//              icon: Icon(Icons.exit_to_app),
-//              onPressed: () {
-//                Navigator.of(context)
-//                    .pushReplacementNamed('/login_screen');
-//              },
-//            ),
-            IconButton(
-              icon: Icon(Icons.account_circle),
-              onPressed: () {
-                Navigator.of(context).pushNamed('/account_screen');
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.share),
-              onPressed: () {
-                Navigator.of(context).pushNamed('/share_screen');
-              },
-            ),
-          ]),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -112,14 +97,10 @@ class HomeScreenState extends State<HomeScreen> {
               ),
               accountName: Text(
                 sharedPreferenceName,
-                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w500),
+                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w500, color: Color(0xffd50000)),
               ),
-//                accountEmail: new Text(
-//                  sharedPreferencePassword,
-//                  style: new TextStyle(
-//                      fontSize: 18.0, fontWeight: FontWeight.w500),
-//                )
-            ),
+//                accountEmail: powerka()
+           ),
             ListTile(
               leading: Image.asset(
                 'images/team_icon.png',
@@ -183,6 +164,23 @@ class _SportLigPageState extends State<SportLigPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+            title: Text('Chooise'),
+            automaticallyImplyLeading: false,
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.account_circle),
+                onPressed: () {
+                  Navigator.of(context).pushNamed('/account_screen');
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.share),
+                onPressed: () {
+                  Navigator.of(context).pushNamed('/share_screen');
+                },
+              ),
+            ]),
         body: FutureBuilder(
             future: makeRequest(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -297,7 +295,25 @@ class _LigListState extends State<LigList> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Scaffold(
+        appBar: AppBar(
+        title: Text('Chooise'),
+    automaticallyImplyLeading: false,
+    actions: <Widget>[
+    IconButton(
+    icon: Icon(Icons.account_circle),
+    onPressed: () {
+    Navigator.of(context).pushNamed('/account_screen');
+    },
+    ),
+    IconButton(
+    icon: Icon(Icons.share),
+    onPressed: () {
+    Navigator.of(context).pushNamed('/share_screen');
+    },
+    ),
+    ]),
+        body: Container(
       child: Center(
         child: Column(children: <Widget>[
           DropdownButton(
@@ -348,7 +364,7 @@ class _LigListState extends State<LigList> {
                   }))
         ]),
       ),
-    );
+    ));
   }
 }
 

@@ -5,8 +5,6 @@ import 'package:login_program/account_screen.dart';
 import 'package:login_program/about_us_screens.dart';
 import 'package:login_program/all_screen.dart';
 import 'package:login_program/auth_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(MyApp());
 
@@ -15,7 +13,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: AuthScreen(),
-      //_getLandingPage(),
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),
