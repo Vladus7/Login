@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'services/crud.dart';
 import 'dart:async';
 import 'package:image_picker/image_picker.dart';
-import 'package:login_program/loading_screen.dart';
+import 'package:login_program/widgets/loading_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:login_program/loginScreen.dart';
 import 'package:login_program/all_screen.dart';

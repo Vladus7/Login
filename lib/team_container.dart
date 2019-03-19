@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:login_program/loading_screen.dart';
+import 'package:login_program/widgets/loading_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:convert';
 import 'dart:async';

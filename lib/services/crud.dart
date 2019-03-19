@@ -56,4 +56,20 @@ class crudMedthods{
   getDataUser() async {
     return await Firestore.instance.collection('users').getDocuments();
   }
+
+  Future<void> addGoods(GoodsData, name ) async{
+    if (isLoggedIn()) {
+      Firestore.instance.collection('purchases').document(name).collection('goods').document(GoodsData['productName']).setData(GoodsData);
+    } else {
+      print('You need to be logged in');
+    }
+  }
+
+  getDataGoods(name) async {
+    return await Firestore.instance.collection('purchases').document(name).collection('goods').getDocuments();
+  }
+
+  DelateGoods(name, productName) async{
+    Firestore.instance.collection('purchases').document(name).collection('goods').document(productName).delete();
+  }
 }

@@ -1,12 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:login_program/team_container.dart';
-import 'package:login_program/countries.dart';
-import 'package:login_program/loading_screen.dart';
-import 'package:login_program/cards_screen.dart';
-import 'package:login_program/tikets_screen.dart';
-import 'dart:convert';
 import 'dart:async';
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:login_program/countries.dart';
+import 'package:login_program/screens/cart_screen.dart';
+import 'package:login_program/team_container.dart';
+import 'package:login_program/tikets_screen.dart';
+import 'package:login_program/widgets/loading_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -28,7 +29,9 @@ class HomeScreenState extends State<HomeScreen> {
     super.initState();
     _onChanged();
   }
-bool sharedPreferenceIsAdmin;
+
+  bool sharedPreferenceIsAdmin;
+
   _onChanged() async {
     sharedPreferences = await SharedPreferences.getInstance();
     setState(() {
@@ -55,7 +58,7 @@ bool sharedPreferenceIsAdmin;
       SportLigPage(),
       LigList(),
       TicketsScreen(),
-      CardScreen(),
+      CartScreen(),
     ];
     final HomeScreenBottmonNavBarItems = <BottomNavigationBarItem>[
       BottomNavigationBarItem(
@@ -65,7 +68,7 @@ bool sharedPreferenceIsAdmin;
       BottomNavigationBarItem(
           icon: Icon(Icons.library_books), title: Text('Tickets')),
       BottomNavigationBarItem(
-          icon: Icon(Icons.layers), title: Text('Carts')),
+          icon: Icon(Icons.shopping_cart), title: Text('Carts')),
     ];
     assert(_ListPages.length == HomeScreenBottmonNavBarItems.length);
     final bottomNavBar = BottomNavigationBar(
@@ -97,10 +100,13 @@ bool sharedPreferenceIsAdmin;
               ),
               accountName: Text(
                 sharedPreferenceName,
-                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w500, color: Color(0xffd50000)),
+                style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xffd50000)),
               ),
 //                accountEmail: powerka()
-           ),
+            ),
             ListTile(
               leading: Image.asset(
                 'images/team_icon.png',
@@ -297,74 +303,74 @@ class _LigListState extends State<LigList> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-        title: Text('Chooise'),
-    automaticallyImplyLeading: false,
-    actions: <Widget>[
-    IconButton(
-    icon: Icon(Icons.account_circle),
-    onPressed: () {
-    Navigator.of(context).pushNamed('/account_screen');
-    },
-    ),
-    IconButton(
-    icon: Icon(Icons.share),
-    onPressed: () {
-    Navigator.of(context).pushNamed('/share_screen');
-    },
-    ),
-    ]),
+            title: Text('Chooise'),
+            automaticallyImplyLeading: false,
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.account_circle),
+                onPressed: () {
+                  Navigator.of(context).pushNamed('/account_screen');
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.share),
+                onPressed: () {
+                  Navigator.of(context).pushNamed('/share_screen');
+                },
+              ),
+            ]),
         body: Container(
-      child: Center(
-        child: Column(children: <Widget>[
-          DropdownButton(
-            value: country,
-            hint: Text("Choose a countre league of which you want to find"),
-            items: _dropDownItems,
-            onChanged: (value) {
-              country = value;
-              print(country);
-              setState(() {});
-              getJsonData();
-            },
-          ),
-          SizedBox(width: 5),
-          FutureBuilder(
-              future: _getSports(),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                return snapshot.hasData
-                    ? DropdownButton(
-                        value: sport,
-                        hint: Text(
-                            "Choose a sport league of which you want to find"),
-                        items: snapshot.data,
-                        onChanged: (value) {
-                          sport = value;
-                          print(sport);
-                          getJsonData();
-                          setState(() {});
-                        },
-                      )
-                    : Padding(
-                        padding: EdgeInsets.symmetric(vertical: 20),
-                        child: CircularProgressIndicator());
-              }),
-          Flexible(
-              child: FutureBuilder(
-                  future: getJsonData(),
+          child: Center(
+            child: Column(children: <Widget>[
+              DropdownButton(
+                value: country,
+                hint: Text("Choose a countre league of which you want to find"),
+                items: _dropDownItems,
+                onChanged: (value) {
+                  country = value;
+                  print(country);
+                  setState(() {});
+                  getJsonData();
+                },
+              ),
+              SizedBox(width: 5),
+              FutureBuilder(
+                  future: _getSports(),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     return snapshot.hasData
-                        ? ListView.builder(
-                            itemCount: snapshot.data.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return snapshot.data[index];
-                            })
+                        ? DropdownButton(
+                            value: sport,
+                            hint: Text(
+                                "Choose a sport league of which you want to find"),
+                            items: snapshot.data,
+                            onChanged: (value) {
+                              sport = value;
+                              print(sport);
+                              getJsonData();
+                              setState(() {});
+                            },
+                          )
                         : Padding(
                             padding: EdgeInsets.symmetric(vertical: 20),
-                            child: LoadingIndicator());
-                  }))
-        ]),
-      ),
-    ));
+                            child: CircularProgressIndicator());
+                  }),
+              Flexible(
+                  child: FutureBuilder(
+                      future: getJsonData(),
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        return snapshot.hasData
+                            ? ListView.builder(
+                                itemCount: snapshot.data.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return snapshot.data[index];
+                                })
+                            : Padding(
+                                padding: EdgeInsets.symmetric(vertical: 20),
+                                child: LoadingIndicator());
+                      }))
+            ]),
+          ),
+        ));
   }
 }
 
