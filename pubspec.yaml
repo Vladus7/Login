@@ -70,12 +70,14 @@ flutter:
     - images/Header-3.jpg
     - images/background5.jpg
     - images/background4.jpg
-    - images/background6.jpg
     - images/logo10.png
     - images/facebook_logo.png
     - images/google_logo2.png
     - images/silverappbar.jpg
     - images/painting.jpg
+    - images/appBar.png
+    - images/b_ticet9.jpg
+    - images/b_ticet6.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
